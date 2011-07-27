@@ -40,7 +40,6 @@ class BinaryTree
   BinaryTreeNode<T> * root_;
 
 public:
-
   BinaryTree()
     : root_(new BinaryTreeNode<T>())
   { }
