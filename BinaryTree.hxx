@@ -1,3 +1,6 @@
+#ifndef __MRR_BINARY_TREE__
+#define __MRR_BINARY_TREE__
+
 #include <iostream>
 #include <string>
 
@@ -73,9 +76,9 @@ public:
       return isElement(node->right_, val);
   } // isElement()
 
-  void print()
+  void print(std::string s = "")
   {
-    print(root_);
+    print(root_, s);
   }
 
   void print(BinaryTreeNode<T> * n, std::string s = "")
@@ -86,13 +89,11 @@ public:
     std::cout << s << " - " << (n->datum_) << std::endl;
     print(n->right_, s + "r");
   } // print()
-
-
-
 };
 
 //==================================================
 // Main...
+/*
 int main()
 {
   BinaryTree<int> tree;
@@ -100,6 +101,13 @@ int main()
   tree.insert(8);
   tree.insert(2);
   tree.insert(12);
-  tree.print();
+  tree.insert(10);
+  tree.insert(1);
+
+  std::string c = "Tree 1 - ";
+  tree.print(c);
   return 0;
 }
+*/
+
+#endif //__MRR_BINARY_TREE__
