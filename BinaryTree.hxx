@@ -1,11 +1,17 @@
 #ifndef __MRR_BINARY_TREE__
 #define __MRR_BINARY_TREE__
 
+//===========================================================================
+// Author: Matt Renaud
+// The following is an implementation of a simple binary tree.
+//===========================================================================
+
 #include <iostream>
 #include <string>
 
-//==================================================
+//===========================================================================
 // BinaryTreeNode Class.
+//===========================================================================
 template <typename T>
 class BinaryTreeNode
 {
@@ -22,12 +28,12 @@ public:
   BinaryTreeNode(T d)
     : isSet_(true), left_(nullptr), right_(nullptr), datum_(d)
   { }
-
 };
 
 
-//==================================================
+//===========================================================================
 // BinaryTree Class.
+//===========================================================================
 template <typename T>
 class BinaryTree
 {
@@ -90,24 +96,5 @@ public:
     print(n->right_, s + "r");
   } // print()
 };
-
-//==================================================
-// Main...
-/*
-int main()
-{
-  BinaryTree<int> tree;
-  tree.insert(4);
-  tree.insert(8);
-  tree.insert(2);
-  tree.insert(12);
-  tree.insert(10);
-  tree.insert(1);
-
-  std::string c = "Tree 1 - ";
-  tree.print(c);
-  return 0;
-}
-*/
 
 #endif //__MRR_BINARY_TREE__
