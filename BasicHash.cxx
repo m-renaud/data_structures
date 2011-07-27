@@ -1,14 +1,17 @@
 #include <iostream>
 #include <cstdlib>
+#include <tuple>
 
-//template <unsigned SIZE>
+//===========================================================================
+// Hash Table Class
+//===========================================================================
+template <unsigned SIZE, typename T = int>
 class HashTable
 {
-
-  std::tuple<unsigned, unsigned> hash(int val)
+  std::tuple<unsigned, unsigned> hash(T val)
   {
-    int index = val % SIZE;
-    int probes = 1;
+    unsigned index = val % SIZE;
+    unsigned probes = 1;
 
     while(table[index] != 0)
     {
@@ -16,14 +19,14 @@ class HashTable
       if(index == SIZE) index = 0;
       ++probes;
     }
-    table[index] = val;
 
     return std::make_tuple(index, probes);
   }
-public:
-  enum {SIZE = 25003};
-  int table[SIZE];
 
+public:
+  T table[SIZE];
+
+  // Constructor.
   HashTable()
   {
     for(unsigned i = 0; i < SIZE; ++i)
@@ -32,19 +35,16 @@ public:
     }
   }
 
-  int insert(int val)
+  unsigned getTableSize()
   {
-    int index = val % SIZE;
-    int probes = 1;
+    return SIZE;
+  }
 
-    while(table[index] != 0)
-    {
-      ++index;
-      if(index == SIZE) index = 0;
-      ++probes;
-    }
-    table[index] = val;
-    return probes;
+  unsigned insert(T val)
+  {
+    std::tuple<unsigned, unsigned> i_p = hash(val);
+    table[std::get<0>(i_p)] = val;
+    return std::get<1>(i_p);
   }
 
   void print()
@@ -60,17 +60,15 @@ public:
 
 int main()
 {
-  HashTable ht;
-  int totalProbes = 0;
+  HashTable<25003, int> ht;
+  unsigned totalProbes = 0;
+
   srand(50);
   for(int i = 0; i < 10000; ++i)
   {
     totalProbes += ht.insert(rand() + 1);
   }
-
   std::cout << "Average Probes: " << static_cast<double>(totalProbes)/10000.0 << std::endl;
-
-
 
 //  ht.print();
 }
