@@ -45,6 +45,21 @@ public:
     : root_(new Node())
   { }
 
+  void empty(Node * cur)
+  {
+    if(cur == nullptr)
+      return;
+    empty(cur->left_);
+    empty(cur->right_);
+    delete cur;
+  }
+
+  void empty()
+  {
+    empty(root_);
+    root_ = new Node();
+  }
+
   Node * insert(Node * node, Node * parent, T val)
   {
     if(!root_->isSet_)
