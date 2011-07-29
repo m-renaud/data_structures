@@ -13,18 +13,32 @@ struct Node
 };
 
 template <typename T>
-struct Stack
+class Stack
 {
   Node<T> * head_;
 
 public:
 
-  Stack() : head_(nullptr){ }
+  Stack() : head_(nullptr) { }
+
+  Stack(Stack<T> const& s)
+  {
+    head_ = new Node<T>(s.head_->datum_);
+    Node<T> * n = head_;
+    Node<T> * cur = s.head_->next_;
+
+    while(cur != nullptr)
+    {
+      n->next_ = new Node<T>(cur->datum_);
+      cur = cur->next_;
+      n = n->next_;
+    }
+
+  }
 
   Node<T> * push(T val)
   {
     Node<T> * n = new Node<T>(val);
-
     n->next_ = head_;
     head_ = n;
     return head_;
