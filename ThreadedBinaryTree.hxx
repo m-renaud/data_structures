@@ -22,8 +22,16 @@ public:
   bool isSet_;
   bool isThreadedLeft;
   bool isThreadedRight;
-  ThreadedBinaryTreeNode * tLeft_;
-  ThreadedBinaryTreeNode * tRight_;
+
+  ThreadedBinaryTreeNode()
+    : isSet_(false), left_(nullptr), right_(nullptr), isThreadedLeft(false),
+      isThreadedRight(false)
+  { }
+
+  ThreadedBinaryTreeNode(T d)
+    : isSet_(true), left_(nullptr), right_(nullptr), isThreadedLeft(false),
+      isThreadedRight(false), datum_(d)
+  { }
 };
 
 
@@ -37,7 +45,7 @@ class ThreadedBinaryTree
   Node * root_;
 
 public:
-  BinaryTree()
+  ThreadedBinaryTree()
     : root_(new Node())
   { }
 
@@ -54,6 +62,77 @@ public:
   {
     empty(root_);
     root_ = new Node();
+  }
+
+  Node * inorderSuccessor(Node * n)
+  {
+    if(n == nullptr)
+      return nullptr;
+    Node * p = n->right_;
+    if(p == nullptr)
+    {
+      return nullptr;
+    }
+    else if(!n->isThreadedLeft)
+    {
+      std::cout << "2" << std::endl;
+
+      while(!p->isThreadedLeft && p->left_ != nullptr)
+	p = p->left_;
+    }
+
+    return p;
+  }
+
+  Node * findInsertPosition(Node * node, Node * parent, T val)
+  {
+    if(node == nullptr)
+      return parent;
+    else if(val < node->datum_)
+      return findInsertPosition(node->left_, node, val);
+    else if(val > node->datum_)
+      return findInsertPosition(node->right_, node, val);
+    else
+      return nullptr;
+  }
+
+  Node * threadedInsert(T val)
+  {
+    if(!root_->isSet_)
+    {
+      root_ = new Node(val);
+      return root_;
+    }
+
+    Node * pos = findInsertPosition(root_, nullptr, val);
+
+    if(pos == nullptr)
+      return nullptr;
+    else
+    {
+      Node * n = new Node(val);
+      return threadedInsert(pos, n);
+    }
+
+  }
+
+  Node * threadedInsert(Node * P, Node * Q)
+  {
+    Node * pRightOld = P->right_;
+    P->right_ = Q;
+    Q->isThreadedLeft = true;
+    Q->left_ = P;
+    Q->right_ = pRightOld;
+    if(!Q->isThreadedRight)
+    {
+      Node * succQ = inorderSuccessor(Q);
+      if(succQ != nullptr)
+      {
+	succQ->isThreadedLeft = true;
+	succQ->left_ = Q;
+      }
+    }
+    return Q;
   }
 
   Node * insert(Node * node, Node * parent, T val)
@@ -101,6 +180,26 @@ public:
       return isElement(node->right_, val);
   } // isElement()
 
+  void threadedPrint(std::string s = "")
+  {
+    threadedPrint(root_, s);
+  }
+
+  void threadedPrint(Node * n, std::string s = "")
+  {
+    if(n == nullptr)
+      return;
+
+    while(n->left_ != nullptr)
+      n = n->left_;
+
+    while(n != nullptr)
+    {
+      std::cout << n->datum_ << " ";
+      n = n->right_;
+    }
+  }
+
   void print(std::string s = "")
   {
     print(root_, s);
@@ -108,7 +207,7 @@ public:
 
   void print(Node * n, std::string s = "")
   {
-    if(n == NULL)
+    if(n == nullptr)
       return;
     print(n->left_, s + "l");
     std::cout << s << " - " << (n->datum_) << std::endl;
@@ -148,9 +247,9 @@ public:
   {
     return depth(root_);
   }
-};
-};
 
+
+};
 
 
 #endif // __MRR_THREADED_BINARY_TREE__

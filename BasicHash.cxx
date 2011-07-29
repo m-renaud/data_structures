@@ -1,6 +1,8 @@
 #include <iostream>
-#include <cstdlib>
 #include <tuple>
+
+#include <cstdlib>
+#include <ctime>
 
 //===========================================================================
 // Hash Table Class
@@ -63,7 +65,7 @@ int main()
   HashTable<25003, int> ht;
   unsigned totalProbes = 0;
 
-  srand(50);
+  srand(time(NULL));
   for(int i = 0; i < 10000; ++i)
   {
     totalProbes += ht.insert(rand() + 1);
