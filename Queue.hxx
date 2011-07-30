@@ -1,13 +1,15 @@
 #ifndef __MRR_QUEUE_HXX__
 #define __MRR_QUEUE_HXX__
 
+#include <iostream>
+
 template <typename T>
 struct Node
 {
   T datum_;
   Node<T> * next_;
 
-  Node() : datum_(0), next_(nullptr) { }
+  Node() : datum_(T()), next_(nullptr) { }
   Node(T const& val) : datum_(val), next_(nullptr) { }
   Node(Node<T> const& n) : datum_(n.datum_), next_(n.next_) { }
 
@@ -36,8 +38,33 @@ public:
     last_ = n;
   }
 
+  Node<T> * enqueue(T val)
+  {
+    Node<T> * n = new Node<T>(val);
 
+    if(head_ == nullptr)
+    {
+      head_ = n;
+      last_ = n;
+    }
 
+    last_->next = n;
+    last_ = n;
+  }
+
+  T dequeue()
+  {
+    if(head_ == nullptr)
+    {
+      std::cout << "error: No elements in the queue. Exiting now." << std::endl;
+      exit(1);
+    }
+    T val = head_->datum_;
+    Node<T> * oldHead = head_;
+    head_ = head_->next_;
+    delete oldHead;
+    return val;
+  }
 
 };
 
