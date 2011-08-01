@@ -38,6 +38,11 @@ public:
     last_ = n;
   }
 
+  bool empty()
+  {
+    return head_ == nullptr;
+  }
+
   Node<T> * enqueue(T val)
   {
     Node<T> * n = new Node<T>(val);
@@ -48,7 +53,7 @@ public:
       last_ = n;
     }
 
-    last_->next = n;
+    last_->next_ = n;
     last_ = n;
   }
 

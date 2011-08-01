@@ -35,7 +35,11 @@ public:
       cur = cur->next_;
       n = n->next_;
     }
+  }
 
+  bool empty()
+  {
+    return head_ == nullptr;
   }
 
   Node<T> * push(T val)

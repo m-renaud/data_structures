@@ -7,7 +7,7 @@ struct Node
   T datum_;
   Node<T> * next_;
 
-  Node() : datum_(0), next_(nullptr) { }
+  Node() : datum_(T()), next_(nullptr) { }
 
   Node(T const& val) : datum_(val), next_(nullptr) { }
 

@@ -25,7 +25,7 @@ public:
 
   ThreadedBinaryTreeNode()
     : isSet_(false), left_(nullptr), right_(nullptr), isThreadedLeft(false),
-      isThreadedRight(false)
+      isThreadedRight(false), datum_(T())
   { }
 
   ThreadedBinaryTreeNode(T d)
@@ -75,8 +75,6 @@ public:
     }
     else if(!n->isThreadedLeft)
     {
-      std::cout << "2" << std::endl;
-
       while(!p->isThreadedLeft && p->left_ != nullptr)
 	p = p->left_;
     }
