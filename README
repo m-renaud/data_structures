@@ -2,5 +2,5 @@ Some data structures that I implemented using c++ as practice.
 I have a couple of linked lists, list.hxx resembles the STL's the most and
 is probably the cleanest code.  As I learn more, I will be adding to this repo.
 
-NODE: The xor_list is from Paul Preney.
+NOTE: The xor_list is from Paul Preney.
 
