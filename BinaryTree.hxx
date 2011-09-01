@@ -29,7 +29,7 @@ public:
     : isSet_(false), left_(nullptr), right_(nullptr)
   { }
 
-  BinaryTreeNode(value_type d)
+  BinaryTreeNode(value_type const& d)
     : isSet_(true), left_(nullptr), right_(nullptr), datum_(d)
   { }
 };
@@ -59,14 +59,14 @@ public:
 
   bool isElement(Node * node, value_type const& val);
 
-  void print(std::string s);
-  void print(Node * n, std::string s);
+  void print(std::string const& s);
+  void print(Node * n, std::string const& s);
 
   value_type min();
   value_type max();
 
   unsigned depth();
-  unsigned depth(Node * cur);
+  unsigned depth(Node * const& cur);
 };
 
 
@@ -96,7 +96,6 @@ void BinaryTree<T, C>::clear(Node * cur)
   clear(cur->left_);
   clear(cur->right_);
   delete cur;
-
 }
 
 
@@ -135,6 +134,8 @@ auto BinaryTree<T, C>::insert(Node * node,
       return newnode;
     }
   }
+  else if(val == node->datum_)
+    return node;
   else if(comp(val, node->datum_))
     insert(node->left_, node, val);
   else
@@ -158,7 +159,7 @@ bool BinaryTree<T, C>::isElement(Node * node, value_type const& val)
 
 //===========================================================================
 template <class T, class C>
-void BinaryTree<T, C>::print(std::string s)
+void BinaryTree<T, C>::print(std::string const& s)
 {
   print(root_, s);
 }
@@ -166,7 +167,7 @@ void BinaryTree<T, C>::print(std::string s)
 
 //===========================================================================
 template <class T, class C>
-void BinaryTree<T, C>::print(Node * n, std::string s = "")
+void BinaryTree<T, C>::print(Node * n, std::string const& s = "")
 {
   if(n == NULL)
     return;
@@ -188,6 +189,7 @@ auto BinaryTree<T, C>::min() -> value_type
   return cur->datum_;
 }
 
+
 //===========================================================================
 template <class T, class C>
 auto BinaryTree<T, C>::max() -> value_type
@@ -203,20 +205,20 @@ auto BinaryTree<T, C>::max() -> value_type
 
 //===========================================================================
 template <class T, class C>
-unsigned BinaryTree<T, C>::depth(Node * cur)
+unsigned BinaryTree<T, C>::depth()
 {
-  if(cur == nullptr)
-    return 0;
-
-  return 1 + std::max(depth(cur->left_), depth(cur->right_));
+  return depth(root_);
 }
 
 
 //===========================================================================
 template <class T, class C>
-unsigned BinaryTree<T, C>::depth()
+unsigned BinaryTree<T, C>::depth(Node * const& cur)
 {
-  return depth(root_);
+  if(cur == nullptr)
+    return 0;
+
+  return 1 + std::max(depth(cur->left_), depth(cur->right_));
 }
 
 #endif // #ifndef MRR_BINARY_TREE__
