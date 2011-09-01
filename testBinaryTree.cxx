@@ -20,7 +20,7 @@ std::string numericToString(T val)
 
 int main()
 {
-  BinaryTree<int> t1;
+  BinaryTree<int, std::greater<int> > t1;
 
   srand(time(NULL));
   unsigned depthSum = 0;
@@ -32,7 +32,7 @@ int main()
     }
     depthSum += t1.depth();
     t1.print("Tree " + numericToString(i) + ": ");
-    t1.empty();
+    t1.clear();
   }
   std::cout << std::endl;
   std::cout << "Expected Avg depth: " << log2(50) << std::endl;

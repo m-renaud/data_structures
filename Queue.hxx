@@ -27,7 +27,7 @@ public:
   Queue(Queue<T> const& q)
   {
     head_ = new Node<T>(q.head_->datum_);
-    Node<T> n = head_;
+    Node<T> * n = head_;
     Node<T> * cur = q.head_->next_;
     while(cur != nullptr)
     {
