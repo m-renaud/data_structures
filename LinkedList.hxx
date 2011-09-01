@@ -1,5 +1,5 @@
-#ifndef __MRR_LINKED_LIST_HXX__
-#define __MRR_LINKED_LIST_HXX__
+#ifndef MRR_LINKED_LIST_HXX__
+#define MRR_LINKED_LIST_HXX__
 
 template <typename T>
 struct Node
@@ -105,4 +105,4 @@ struct List
 
 };
 
-#endif // __MRR_LINKED_LIST_HXX__
+#endif // #ifndef MRR_LINKED_LIST_HXX__

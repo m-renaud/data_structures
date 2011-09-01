@@ -1,5 +1,5 @@
-#ifndef __MRR_LIST_HXX__
-#define __MRR_LIST_HXX__
+#ifndef MRR_LIST_HXX__
+#define MRR_LIST_HXX__
 
 #include <cstddef>
 
@@ -210,4 +210,5 @@ void list<T>::remove(value_type val)
 }
 
 } // namespace mrr
-#endif
+
+#endif // #ifndef MRR_LIST_HXX__

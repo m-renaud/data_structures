@@ -1,5 +1,5 @@
-#ifndef __MRR_STACK_HXX__
-#define __MRR_STACK_HXX__
+#ifndef MRR_STACK_HXX__
+#define MRR_STACK_HXX__
 
 #include <iostream>
 
@@ -65,4 +65,4 @@ public:
   }
 };
 
-#endif // __MRR_STACK_HXX__
+#endif // #ifndef MRR_STACK_HXX__

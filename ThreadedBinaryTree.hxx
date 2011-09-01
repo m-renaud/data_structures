@@ -1,5 +1,5 @@
-#ifndef __MRR_THREADED_BINARY_TREE__
-#define __MRR_THREADED_BINARY_TREE__
+#ifndef MRR_THREADED_BINARY_TREE__
+#define MRR_THREADED_BINARY_TREE__
 
 //===========================================================================
 // Author: Matt Renaud
@@ -250,4 +250,4 @@ public:
 };
 
 
-#endif // __MRR_THREADED_BINARY_TREE__
+#endif // #ifndef MRR_THREADED_BINARY_TREE__

@@ -1,5 +1,5 @@
-#ifndef __MRR_QUEUE_HXX__
-#define __MRR_QUEUE_HXX__
+#ifndef MRR_QUEUE_HXX__
+#define MRR_QUEUE_HXX__
 
 #include <iostream>
 
@@ -73,4 +73,4 @@ public:
 
 };
 
-#endif // __MRR_QUEUE_HXX__
+#endif // #ifndef MRR_QUEUE_HXX__
