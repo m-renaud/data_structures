@@ -18,10 +18,11 @@ class BinaryTreeNode
 {
 public:
   typedef T value_type;
+  typedef BinaryTreeNode<value_type> Node;
 
   value_type datum_;
-  BinaryTreeNode<value_type> * left_;
-  BinaryTreeNode<value_type> * right_;
+  Node * left_;
+  Node * right_;
   bool isSet_;
 
   BinaryTreeNode()
@@ -101,7 +102,7 @@ void BinaryTree<T, C>::clear(Node * cur)
 
 //===========================================================================
 template <class T, class C>
-BinaryTreeNode<T> * BinaryTree<T, C>::insert(value_type const&val)
+auto BinaryTree<T, C>::insert(value_type const&val) -> Node *
 {
   return insert(root_, nullptr, val);
 }
@@ -109,9 +110,9 @@ BinaryTreeNode<T> * BinaryTree<T, C>::insert(value_type const&val)
 
 //===========================================================================
 template <class T, class C>
-BinaryTreeNode<T> * BinaryTree<T, C>::insert(Node * node,
-					     Node * parent,
-					     value_type const& val)
+auto BinaryTree<T, C>::insert(Node * node,
+			      Node * parent,
+			      value_type const& val) -> Node *
 {
   compare_type comp;
 
@@ -177,7 +178,7 @@ void BinaryTree<T, C>::print(Node * n, std::string s = "")
 
 //===========================================================================
 template <class T, class C>
-T BinaryTree<T, C>::min()
+auto BinaryTree<T, C>::min() -> value_type
 {
   Node * cur = root_;
 
@@ -189,7 +190,7 @@ T BinaryTree<T, C>::min()
 
 //===========================================================================
 template <class T, class C>
-T BinaryTree<T, C>::max()
+auto BinaryTree<T, C>::max() -> value_type
 {
   Node * cur = root_;
 
