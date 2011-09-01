@@ -4,21 +4,25 @@
 //===========================================================================
 // Author: Matt Renaud
 // The following is an implementation of a threaded binary tree.
-//===========================================================================
+//---------------------------------------------------------------------------
 
 #include <stdio.h>
 #include <string.h>
 
 //===========================================================================
 // ThreadedBinaryTreeNode Class.
-//===========================================================================
+//---------------------------------------------------------------------------
 template <typename T>
 class ThreadedBinaryTreeNode
 {
 public:
-  T datum_;
-  ThreadedBinaryTreeNode * left_;
-  ThreadedBinaryTreeNode * right_;
+
+  typedef T value_type;
+  typedef ThreadedBinaryTreeNode<T> node_type;
+
+  value_type datum_;
+  node_type * left_;
+  node_type * right_;
   bool isSet_;
   bool isThreadedLeft;
   bool isThreadedRight;
@@ -28,7 +32,7 @@ public:
       isThreadedRight(false), datum_(T())
   { }
 
-  ThreadedBinaryTreeNode(T d)
+  ThreadedBinaryTreeNode(value_type const& d)
     : isSet_(true), left_(nullptr), right_(nullptr), isThreadedLeft(false),
       isThreadedRight(false), datum_(d)
   { }
@@ -37,19 +41,22 @@ public:
 
 //===========================================================================
 // ThreadedBinaryTree Class.
-//===========================================================================
+//---------------------------------------------------------------------------
 template <typename T>
 class ThreadedBinaryTree
 {
-  typedef ThreadedBinaryTreeNode<T> Node;
-  Node * root_;
+
+  typedef T value_type;
+  typedef ThreadedBinaryTreeNode<T> node_type;
+
+  node_type * root_;
 
 public:
   ThreadedBinaryTree()
-    : root_(new Node())
+    : root_(new node_type())
   { }
 
-  void empty(Node * cur)
+  void empty(node_type * cur)
   {
     if(cur == nullptr)
       return;
@@ -61,14 +68,14 @@ public:
   void empty()
   {
     empty(root_);
-    root_ = new Node();
+    root_ = new node_type();
   }
 
-  Node * inorderSuccessor(Node * n)
+  node_type * inorderSuccessor(node_type * n)
   {
     if(n == nullptr)
       return nullptr;
-    Node * p = n->right_;
+    node_type * p = n->right_;
     if(p == nullptr)
     {
       return nullptr;
@@ -82,7 +89,9 @@ public:
     return p;
   }
 
-  Node * findInsertPosition(Node * node, Node * parent, T val)
+  node_type * findInsertPosition(node_type * node
+				 , node_type * parent
+				 , value_type const& val)
   {
     if(node == nullptr)
       return parent;
@@ -94,36 +103,36 @@ public:
       return nullptr;
   }
 
-  Node * threadedInsert(T val)
+  node_type * threadedInsert(value_type val)
   {
     if(!root_->isSet_)
     {
-      root_ = new Node(val);
+      root_ = new node_type(val);
       return root_;
     }
 
-    Node * pos = findInsertPosition(root_, nullptr, val);
+    node_type * pos = findInsertPosition(root_, nullptr, val);
 
     if(pos == nullptr)
       return nullptr;
     else
     {
-      Node * n = new Node(val);
+      node_type * n = new node_type(val);
       return threadedInsert(pos, n);
     }
 
   }
 
-  Node * threadedInsert(Node * P, Node * Q)
+  node_type * threadedInsert(node_type * P, node_type * Q)
   {
-    Node * pRightOld = P->right_;
+    node_type * pRightOld = P->right_;
     P->right_ = Q;
     Q->isThreadedLeft = true;
     Q->left_ = P;
     Q->right_ = pRightOld;
     if(!Q->isThreadedRight)
     {
-      Node * succQ = inorderSuccessor(Q);
+      node_type * succQ = inorderSuccessor(Q);
       if(succQ != nullptr)
       {
 	succQ->isThreadedLeft = true;
@@ -133,16 +142,16 @@ public:
     return Q;
   }
 
-  Node * insert(Node * node, Node * parent, T val)
+  node_type * insert(node_type * node, node_type * parent, value_type const& val)
   {
     if(!root_->isSet_)
     {
-      root_ = new Node(val);
+      root_ = new node_type(val);
       return root_;
     }
     if(node == nullptr)
     {
-      Node * newnode = new Node(val);
+      node_type * newnode = new node_type(val);
       if(val < parent->datum_)
       {
 	parent->left_ = newnode;
@@ -161,12 +170,12 @@ public:
 
   } // insert()
 
-  Node * insert(T val)
+  node_type * insert(value_type val)
   {
     return insert(root_, nullptr, val);
   }
 
-  bool isElement(Node * node, T val)
+  bool isElement(node_type * node, value_type val)
   {
     if(node == nullptr)
       return false;
@@ -183,7 +192,7 @@ public:
     threadedPrint(root_, s);
   }
 
-  void threadedPrint(Node * n, std::string s = "")
+  void threadedPrint(node_type * n, std::string s = "")
   {
     if(n == nullptr)
       return;
@@ -203,7 +212,7 @@ public:
     print(root_, s);
   }
 
-  void print(Node * n, std::string s = "")
+  void print(node_type * n, std::string s = "")
   {
     if(n == nullptr)
       return;
@@ -212,9 +221,9 @@ public:
     print(n->right_, s + "r");
   } // print()
 
-  T min()
+  value_type min()
   {
-    Node * cur = root_;
+    node_type * cur = root_;
 
     while(cur->left_ != nullptr)
       cur = cur->left_;
@@ -222,9 +231,9 @@ public:
     return cur->datum_;
   }
 
-  T max()
+  value_type max()
   {
-    Node * cur = root_;
+    node_type * cur = root_;
 
     while(cur->right_ != nullptr)
       cur = cur->right_;
@@ -232,7 +241,7 @@ public:
     return cur->datum_;
   }
 
-  unsigned depth(Node * cur)
+  unsigned depth(node_type * cur)
   {
 
     if(cur == nullptr)
@@ -245,8 +254,6 @@ public:
   {
     return depth(root_);
   }
-
-
 };
 
 
