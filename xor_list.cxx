@@ -2,6 +2,8 @@
 
 using namespace std;
 
+// Code by Paul Preney
+
 //
 // Start by creating a class that will represent an XOR-encoded
 // pointer pair...
