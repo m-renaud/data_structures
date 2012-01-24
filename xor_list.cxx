@@ -82,8 +82,8 @@ struct Node
 template <typename T>
 struct xor_list
 {
-  node<T> * head_;
-  node<T> * tail_;
+  Node<T> * head_;
+  Node<T> * tail_;
 
   xor_list() : head_(nullptr), tail_(nullptr) { }
 
