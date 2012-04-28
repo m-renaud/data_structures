@@ -20,9 +20,9 @@ public:
   void insert(value_type const&);
   void remove_root();
 
-  value_type root()              { return heap_[0]; }
-  value_type root()        const { return heap_[0]; }
-  std::size_t const size() const { return heap_.size(); }
+  value_type  root()       { return heap_[0]; }
+  value_type  root() const { return heap_[0]; }
+  std::size_t size() const { return heap_.size(); }
 
 private:
   void up_heap();

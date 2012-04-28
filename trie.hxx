@@ -4,6 +4,13 @@
 #include <map>
 
 //m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+namespace mrr {
+
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+
+//m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 template <typename Key, typename T>
 class trie;
 
@@ -13,21 +20,24 @@ class trie_node
 {
   friend class trie<Key, T>;
 
-  typedef Key key_type;
+  using key_type = Key;
 
-  typedef T value_type;
-  typedef T& reference;
-  typedef T const& const_reference;
+  using value_type = T;
+  using reference = T&;
+  using const_reference = T const&;
 
-  typedef trie_node<Key, T> node_type;
-  typedef std::map<typename key_type::value_type, node_type> edge_type;
+  using node_type = trie_node<Key, T>;
+  using edge_type = std::map<typename key_type::value_type, node_type>;
 
   edge_type edges_;
   bool final_state_;
   value_type value_;
 
 public:
-  trie_node();
+  trie_node()
+    : edges_(), final_state_(false), value_(value_type())
+  {
+  }
 };
 
 
@@ -36,66 +46,43 @@ template <typename Key, typename T>
 class trie
 {
 public:
-  typedef T value_type;
-  typedef T& reference;
-  typedef T const& const_reference;
+  using value_type = T;
+  using reference = T&;
+  using const_reference = T const&;
 
-  typedef trie_node<Key,T> node_type;
-  typedef Key key_type;
-  typedef typename node_type::edge_type edge_type;
-  typedef value_type* iterator;
+  using node_type = trie_node<Key,T>;
+  using key_type = Key;
+  using edge_type = typename node_type::edge_type;
+  using iterator = value_type*;
 
 private:
   node_type root_;
   iterator end_;
 
 public:
-  trie();
-  auto end() const -> iterator;
-  auto insert(key_type const& key, value_type const& value) -> value_type&;
+  trie()
+    : root_(), end_(nullptr)
+  {
+  }
+  
+  iterator end() const { return end_; }
+  
+  auto insert(key_type const& key, value_type const& value) -> iterator;
   auto find(key_type const& key) -> iterator;
   auto operator [] (key_type const& key) const -> value_type&;
 };
 
 
 //m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// trie_node<Key,T> member functions...
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-//m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-template <typename Key, typename T>
-trie_node<Key,T>::trie_node()
-  : edges_(), final_state_(false), value_(value_type())
-{
-}
-
-
-//m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // trie<T,Index> member functions...
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-
 //m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 template <typename Key, typename T>
-trie<Key,T>::trie()
-  : root_(), end_(nullptr)
+auto trie<Key,T>::insert(key_type const& key, value_type const& value)
+  -> iterator
 {
-}
-
-
-//m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-template <typename Key, typename T>
-auto trie<Key,T>::end() const -> iterator
-{
-  return end_;
-}
-
-
-//m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-template <typename Key, typename T>
-auto trie<Key,T>::insert(key_type const& key, value_type const& value) -> value_type&
-{
-  node_type * cur = &root_;
+  node_type* cur = &root_;
   typename edge_type::iterator edge;
 
   for(auto i = std::begin(key); i != std::end(key); ++i)
@@ -109,6 +96,8 @@ auto trie<Key,T>::insert(key_type const& key, value_type const& value) -> value_
 
   cur->value_ = value;
   cur->final_state_ = true;
+
+  return &cur->value_;
 }
 
 
@@ -165,5 +154,10 @@ auto end(trie<Key,T> const& t) -> typename trie<Key,T>::value_type&
 }
 
 
+//m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+} // namespace mrr
+
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 #endif // #ifndef MRR_TRIE_HXX_

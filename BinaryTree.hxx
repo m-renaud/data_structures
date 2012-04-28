@@ -21,16 +21,16 @@ public:
   typedef BinaryTreeNode<value_type> Node;
 
   value_type datum_;
-  Node * left_;
-  Node * right_;
+  Node* left_;
+  Node* right_;
   bool isSet_;
 
   BinaryTreeNode()
-    : isSet_(false), left_(nullptr), right_(nullptr)
+    : datum_(value_type()), left_(nullptr), right_(nullptr), isSet_(false)
   { }
 
   BinaryTreeNode(value_type const& d)
-    : isSet_(true), left_(nullptr), right_(nullptr), datum_(d)
+    : datum_(d), left_(nullptr), right_(nullptr), isSet_(true)
   { }
 };
 
@@ -44,6 +44,7 @@ class BinaryTree
   typedef T value_type;
   typedef Comp compare_type;
   typedef BinaryTreeNode<value_type> Node;
+
   Node * root_;
 
 public:
@@ -109,9 +110,11 @@ auto BinaryTree<T, C>::insert(value_type const& val) -> Node *
 
 //===========================================================================
 template <class T, class C>
-auto BinaryTree<T, C>::insert(Node * node,
-			      Node * parent,
-			      value_type const& val) -> Node *
+auto BinaryTree<T, C>::insert(
+  Node * node, Node * parent,
+  value_type const& val
+)
+  -> Node*
 {
   compare_type comp;
 
@@ -137,9 +140,9 @@ auto BinaryTree<T, C>::insert(Node * node,
   else if(val == node->datum_)
     return node;
   else if(comp(val, node->datum_))
-    insert(node->left_, node, val);
+    return insert(node->left_, node, val);
   else
-    insert(node->right_, node, val);
+    return insert(node->right_, node, val);
 }
 
 
