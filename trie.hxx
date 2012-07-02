@@ -11,32 +11,25 @@ namespace mrr {
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-//m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
 
 //m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 template <typename Key, typename T>
 class trie
 {
 private:
-  struct trie_node;
+  class trie_node;
   class trie_iterator_base;
   class trie_iterator;
 
   using node_type = trie_node;
   using edge_type = typename node_type::edge_type;
   using edge_list_type = typename node_type::edge_list_type;
+  using edge_list_iterator = typename edge_list_type::iterator;
   
 public:
   using key_type = Key;
   using mapped_type = T;
   using value_type = std::pair<Key, T>;
-
-  // Not sure about these yet...
-  using reference = T&;
-  using const_reference = T const&;
-
-  // using iterator = value_type*;
   using iterator = trie_iterator;
 
 private:
@@ -50,24 +43,18 @@ public:
   }
   
   iterator end() const { return end_; }
-  
   auto insert(value_type const& x) -> std::pair<iterator, bool>;
-  
   auto find(key_type const& key) -> iterator;
-#if 0
-  auto operator [] (key_type const& key) -> value_type&;
-#endif
-};
+
+}; // class trie<Key,T>
 
 
 //m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// trie<T,Index> member functions...
+// mrr::trie<Key,T> member functions and inner classes
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+
 //m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// Insert a key, value pair into the trie...
-// Note: key   -> x.first
-//       value -> x.second
 template <typename Key, typename T>
 auto trie<Key,T>::insert(value_type const& x) -> std::pair<iterator, bool>
 {
@@ -75,7 +62,7 @@ auto trie<Key,T>::insert(value_type const& x) -> std::pair<iterator, bool>
   using std::end;
   
   node_type* cur = &root_;
-  typename edge_list_type::iterator edge;
+  edge_list_iterator edge;
 
   auto key_end = end(x.first);
 
@@ -84,21 +71,20 @@ auto trie<Key,T>::insert(value_type const& x) -> std::pair<iterator, bool>
   {
     edge = cur->edges_.find(*i);
 
-    // If the current in the key doesn't exist, create it
+    // If the current in the key doesn't exist, create it, if it does, follow 
     if(edge == end(cur->edges_))
     {
       auto newly_created = &(cur->edges_[*i]);
       newly_created->parent_ = cur;
       cur = newly_created;
     }
-
-    // If it does, follow the edge
     else
+    {
       cur = &(edge->second);
+    }
   }
 
 
-  // FIX:
   // If the key already exists, ignore the insert attempt
   if(cur->final_state_ == true)
   {
@@ -119,45 +105,8 @@ auto trie<Key,T>::insert(value_type const& x) -> std::pair<iterator, bool>
 } // std::pair<iterator, bool> insert()
 
 
-// Not using this currently, needs to be reimplemented
-#if 0
-//m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// Find a key in the trie...
-template <typename Key, typename T>
-auto trie<Key,T>::operator [] (key_type const& key) -> value_type&
-{
-  // Start at the root of the trie
-  node_type const* cur = &root_;
-  typename edge_type::iterator edge;
-
-  auto key_end = std::end(key);
-
-  // Loop through the key
-  for(auto i = std::begin(key); i != key_end;++i)
-  {
-    // Follow the correct edge
-    edge = cur->edges_.find(*i);
-
-    // If the edge is not found, return end
-    if(edge == std::end(cur->edges_))
-      return end_;
-    // If it is, move the pointer and continue 
-    else
-      cur = *edge;
-  }
-
-  // If the node we end up at is final, return the value
-  if(cur->final_state_ == true)
-    return std::make_pair(cur->value_);
-  // If not, return end
-  else
-    return end_;
-}
-#endif 
-
 
 //m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// Finds a key in the trie
 template <typename Key, typename T>
 auto trie<Key,T>::find(key_type const& key) -> iterator
 {
@@ -187,20 +136,12 @@ auto trie<Key,T>::find(key_type const& key) -> iterator
   // If not, return end
   else
     return end_;
-}
 
+} // iterator trie<Key,T>::find()
 
-//m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-template <typename Key, typename T>
-auto end(trie<Key,T> const& t) -> typename trie<Key,T>::value_type&
-{
-  return t.end();
-}
 
 
 //m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// class trie_node<Key,T>
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename Key, typename T>
 class trie<Key,T>::trie_node
 {
@@ -220,13 +161,11 @@ public:
   trie_node* parent_;
   value_type value_;
 
-}; // class trie_node<Key,T>
+}; // class trie<Key,T>::trie_node
 
 
 
 //m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// class trie_iterator_base<Key,T> 
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename Key, typename T>
 class trie<Key,T>::trie_iterator_base
   : std::iterator<std::forward_iterator_tag, value_type> 
@@ -264,12 +203,11 @@ private:
   {
   }
   
-}; // class trie_iterator_base
+}; // class trie<Key,T>::trie_iterator_base
+
 
 
 //m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// class trie_iterator<Key,T> 
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename Key, typename T>
 class trie<Key,T>::trie_iterator
   : public trie<Key,T>::trie_iterator_base
@@ -298,7 +236,8 @@ private:
   {
   }
 
-}; // class trie_iterator
+}; // class trie<Key,T>::trie_iterator
+
 
 
 template <typename Key, typename T>
