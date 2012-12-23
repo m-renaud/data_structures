@@ -50,8 +50,10 @@ auto heap<T,Comp>::insert(value_type const& value) -> void
 template <typename T, typename Comp>
 auto heap<T,Comp>::remove_root() -> void
 {
+  using std::swap;
+
   value_type value = heap_[0];
-  std::swap(heap_.front(), heap_.back());
+  swap(heap_.front(), heap_.back());
   heap_.pop_back();
   down_heap();
 }
@@ -59,6 +61,8 @@ auto heap<T,Comp>::remove_root() -> void
 template <typename T, typename Comp>
 auto heap<T,Comp>::up_heap() -> void
 {
+  using std::swap;
+
   for(size_type index = heap_.size() - 1; index > 0;)
   {
     size_type parent = ((index + 1)/2) - 1;
@@ -66,7 +70,7 @@ auto heap<T,Comp>::up_heap() -> void
     if(comp(heap_[parent], heap_[index]))
       break;
 
-    std::swap(heap_[parent], heap_[index]);
+    swap(heap_[parent], heap_[index]);
     index = parent;
   }
 }
@@ -74,6 +78,8 @@ auto heap<T,Comp>::up_heap() -> void
 template <typename T, typename Comp>
 auto heap<T,Comp>::down_heap() -> void
 {
+  using std::swap;
+
   size_type index = 0;
 
   for(;;)
@@ -97,7 +103,7 @@ auto heap<T,Comp>::down_heap() -> void
       break;
 
     // Swap the current node with the minimum child.
-    std::swap(heap_[index], heap_[min_child]);
+    swap(heap_[index], heap_[min_child]);
     index = min_child;
   }
 }
