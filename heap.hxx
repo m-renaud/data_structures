@@ -12,14 +12,14 @@ namespace mrr {
 
 
 //m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-template <typename T, typename Comp = std::less<T> >
+template <typename T, typename Comp = std::less<T>>
 class heap
 {
 public:
-  typedef T value_type;
-  typedef Comp compare_type;
-  typedef const_reference value_type const&;
-  typedef size_type std::size_t;
+  using value_type = T;
+  using compare_type = Comp;
+  using const_reference = value_type const&;
+  using size_type = std::size_t;
 
 private:
   std::vector<T> heap_;
@@ -75,21 +75,18 @@ template <typename T, typename Comp>
 auto heap<T,Comp>::down_heap() -> void
 {
   size_type index = 0;
-  size_type child1;
-  size_type child2;
-  size_type min_child; // Minimum under the strict order.
 
   for(;;)
   {
-    child1 = 2 * index + 1; // Left child.
-    child2 = 2 * index + 2; // Right child.
+    size_type child1 = 2 * index + 1; // Left child.
+    size_type child2 = 2 * index + 2; // Right child.
 
     // We are at the bottom of the heap, no need to go further.
     if(child1 >= heap_.size())
       break;
 
     // Set the minimum child to the left child to begin with.
-    min_child = child1;
+    size_type min_child = child1;
 
     // If there is a right child and it is ``less" than the left,
     if(child2 < heap_.size() && comp(heap_[child2], heap_[child1]))
