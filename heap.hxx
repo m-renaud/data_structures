@@ -26,6 +26,8 @@ private:
   compare_type comp;
 
 public:
+  template <typename... Args>
+  void emplace(Args&&...);
   void insert(value_type const&);
   void remove_root();
 
@@ -39,6 +41,14 @@ private:
 
 }; // class heap
 
+
+template <typename T, typename Comp>
+template <typename... Args>
+auto heap<T,Comp>::emplace(Args&&... args) -> void
+{
+  heap_.emplace_back(std::forward<Args>(args)...);
+  up_heap();
+}
 
 template <typename T, typename Comp>
 auto heap<T,Comp>::insert(value_type const& value) -> void
